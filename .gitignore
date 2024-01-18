@@ -1,0 +1,17 @@
+.idea/
+.vscode/
+.buildpath
+.settings/
+.project
+*.patch
+.git/
+runtime/
+vendor/
+test/reports
+.phpintel/
+.env
+.DS_Store
+.phpunit*
+*.cache
+*.bak
+*.tmp
