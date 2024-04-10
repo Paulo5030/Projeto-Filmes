@@ -5,9 +5,10 @@ namespace App\Services;
 use App\Models\Movie;
 use App\Models\Review;
 use App\Repositories\ReviewRepository;
+use App\Services\Contracts\ReviewInterface;
 use Illuminate\Support\Facades\Auth;
 
-class ReviewService
+class ReviewService implements ReviewInterface
 {
     public function __construct(protected ReviewRepository $reviewRepository,
                                 protected  MessageService $messageService)

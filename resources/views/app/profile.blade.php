@@ -4,15 +4,15 @@
     <div class="col-md-8 offset-md-2">
         <div class="row" style=" text-align: center;">
             <div class="col-md-12" style=" background-color: #333;  border-bottom: 3px solid #ccc;">
-                <h1 class="page-title">{{$user->name}}</h1>
-                @if ($image && $image !== 'default_image.jpg')
-                    <div id="profile-image-container" class="profile-image" style="background-image: url('{{ asset($image) }}')"></div>
+                <h1 class="page-title">{{$user['name']}}</h1>
+                @if ($user['image'] && $user['image'] !== 'default_image.jpg')
+                    <div id="profile-image-container" class="profile-image" style="background-image: url('{{ asset($user['image']) }}')"></div>
                 @else
                     <div id="profile-image-container" class="profile-image" style="background-image: url('{{ asset('img/users/user.png') }}')"></div>
                 @endif
                 <h3 class="about-title">Sobre:</h3>
-                @if(isset($user->bio))
-                    <p class="profile-description" style=" max-width: 500px;  margin: 20px auto;">{{$user->bio}}</p>
+                @if(isset($user['bio']))
+                    <p class="profile-description" style=" max-width: 500px;  margin: 20px auto;">{{$user['bio']}}</p>
                 @else
                     <p class="profile-description">O usuario ainda não escreveu nada aqui...</p>
                 @endif

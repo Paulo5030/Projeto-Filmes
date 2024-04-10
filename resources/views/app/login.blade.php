@@ -8,34 +8,34 @@
 
 <div id="main-container" class="container-fluid edit-profile-page">
     <div class="col-md-12">
-        <form action="{{ route('updateUser') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('updateUser')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="type" value="update">
             <div class="row">
                 <div class="col-md-4">
-                    <h1>{{ $name }} {{ $lastname }}</h1>
+                    <h1>{{$user['name']}} {{$user['lastname']}}</h1>
                     <p class="page-description">Altere seus dados no formulário abaixo:</p>
 
                     <div class="form-group mb-3">
                         <label for="name" class="mb-2">Nome:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Digite seu nome" value="{{ $name }}">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Digite seu nome" value="{{$user['name']}}">
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="lastname" class="mb-2">Sobrenome:</label>
-                        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Digite seu sobrenome" value="{{ $lastname }}">
+                        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Digite seu sobrenome" value="{{$user['lastname']}}">
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="email" class="mb-2">E-mail:</label>
-                        <input type="text" readonly class="form-control text-muted" id="email" name="email" placeholder="Digite seu email" value="{{ $email }}" disabled>
+                        <input type="text" readonly class="form-control text-muted" id="email" name="email" placeholder="Digite seu email" value="{{$user['email']}}" disabled>
                     </div>
 
                     <input type="submit" class="btn card-btn" value="Alterar">
                 </div>
 
                 <div class="col-md-4">
-                    @if ($image && $image !== 'default_image.jpg')
+                    @if ($user['image'] && $user['image'] !== 'default_image.jpg')
                         <div id="profile-image-container" style="background-image: url('{{ asset($image) }}')"></div>
                     @else
                         <div id="profile-image-container" style="background-image: url('{{ asset('img/users/user.png') }}')"></div>
@@ -46,7 +46,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="bio" class="mb-2">Sobre você:</label>
-                        <textarea class="form-control" name="bio" id="bio" rows="5" placeholder="Conte quem você é, o que faz e onde trabalha...">{{ $bio }}</textarea>
+                        <textarea class="form-control" name="bio" id="bio" rows="5" placeholder="Conte quem você é, o que faz e onde trabalha...">{{$user['bio']}}</textarea>
                     </div>
                 </div>
             </div>

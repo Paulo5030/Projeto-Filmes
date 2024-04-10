@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Models\Review;
 use App\Models\User;
-use App\Services\AuthService;
+use App\Services\Contracts\AuthInterface;
+use App\Services\Contracts\ReviewInterface;
 use App\Services\MessageService;
-use App\Services\ReviewService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function __construct(protected AuthService $authService,
+    public function __construct(protected AuthInterface $authService,
                                 protected MessageService $messageService,
-                                protected ReviewService $reviewService
+                                protected ReviewInterface $reviewService
     ) {
     }
 
@@ -30,8 +30,7 @@ class AuthController extends Controller
         if ($result) {
             $user = User::create($request->all());
             Auth::login($user);
-            $name = $user->name;
-            return redirect()->route('userProfile', ['name' => $name]);
+            return redirect()->route('userProfile', ['name' => $user->name]);
         }
         return view('app.authUser');
     }
@@ -47,12 +46,8 @@ class AuthController extends Controller
     {
         $result = $this->authService->updatePassword($request->all());
         if ($result) {
-            $user = User::find(auth()->id());
-            if ($user) {
-                $user->update($request->all());
-                return redirect()->route('userProfile');
+              return redirect()->route('userProfile');
             }
-        }
         return redirect()->route('login');
     }
     public function login(Request $request)
@@ -60,11 +55,9 @@ class AuthController extends Controller
         $credentials = $request->all('email', 'password');
 
         if (Auth::attempt($credentials)) {
-                $user = Auth::user();
-                $name = $user->name;
-                $lastname = $user->lastname;
-                $this->messageService->setWelcomeMessage($name);
-                return redirect()->route('userProfile', ['name' => $name, 'lastname' => $lastname]);
+                $user = Auth::user()->only(['name', 'lastname']);
+                $this->messageService->setWelcomeMessage($user['name']);
+                return redirect()->route('userProfile', compact('user'));
         }
         $this->messageService->messageLogininvalidUser();
         return view('app.authUser');
@@ -78,24 +71,14 @@ class AuthController extends Controller
 
     public function userProfile()
     {
-        $user = Auth::user();
-        $name = $user->name;
-        $lastname = $user->lastname;
-        $email = $user->email;
-        $image = $user->image;
-        $bio = $user->bio;
-        return view('app.login', compact('name', 'lastname', 'email', 'image', 'bio', 'user'));
+        $user = Auth::user()->only(['name', 'lastname', 'email', 'image', 'bio']);
+        return view('app.login', compact('user'));
     }
 
     public function profile($id = null)
     {
         if ($id !== null) {
-            $user = User::findOrFail($id);
-            $name = $user->name;
-            $lastname = $user->lastname;
-            $email = $user->email;
-            $image = $user->image;
-            $bio = $user->bio;
+            $user = Auth::user()->only((['name', 'lastname', 'email', 'image', 'bio']));
             $movies = Movie::where('user_id', $id)->get();
 
             foreach ($movies as $movie) {
@@ -104,19 +87,14 @@ class AuthController extends Controller
 
             $hasReviewed = false;
 
-            return view('app.profile', compact('name', 'lastname', 'email', 'image', 'bio', 'movies', 'user', 'hasReviewed'));
+            return view('app.profile', compact('user', 'hasReviewed'));
         }
-            $user = Auth::user();
-            $movies = Movie::where('user_id', $user->id)->get();
-            $name = $user->name;
-            $lastname = $user->lastname;
-            $email = $user->email;
-            $image = $user->image;
-            $bio = $user->bio;
+            $user = Auth::user()->only(['name', 'lastname', 'email', 'image', 'bio', 'id']);
+            $movies = Movie::where('user_id', $user['id'])->get();
 
-            $hasReviewed = $user && Review::whereIn('movies_id', $movies->pluck('id'))->where('users_id', $user->id)->exists();
+            $hasReviewed = $user && Review::whereIn('movies_id', $movies->pluck('id'))->where('users_id', $user['id'])->exists();
 
-            return view('app.profile', compact('name', 'lastname', 'email', 'image', 'bio', 'movies', 'user', 'hasReviewed'));
+            return view('app.profile', compact('movies', 'user', 'hasReviewed'));
         }
 
 }

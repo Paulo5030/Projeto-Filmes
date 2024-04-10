@@ -6,23 +6,24 @@ use App\Models\User;
 
 class UserAuthRepository
 {
+    private $user;
     public function __construct(User $user)
     {
+        $this->user = $user;
     }
 
     public function buildUser ($data)
     {
-        $user = new User();
-        $user->id = $data['id'];
-        $user->name = $data['name'];
-        $user->lastname = $data['lastname'];
-        $user->email = $data['email'];
-        $user->password = $data['password'];
-        $user->image = $data['image'];
-        $user->bio = $data['bio'];
-        $user->token = $data['token'];
+        $this->user->id = $data['id'];
+        $this->user->name = $data['name'];
+        $this->user->lastname = $data['lastname'];
+        $this->user->email = $data['email'];
+        $this->user->password = $data['password'];
+        $this->user->image = $data['image'];
+        $this->user->bio = $data['bio'];
+        $this->user->token = $data['token'];
 
-        return $user;
+        return $this->user;
     }
     public function emailExists($email)
     {

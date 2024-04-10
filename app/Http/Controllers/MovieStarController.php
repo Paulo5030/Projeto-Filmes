@@ -3,30 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use App\Services\Contracts\MovieStarInterface;
+use App\Services\Contracts\ReviewInterface;
 use App\Services\MessageService;
-use App\Services\MovieStarService;
-use App\Services\ReviewService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class MovieStarController extends Controller
 {
-    public function __construct(protected MovieStarService $movieStarService,
+    public function __construct(protected MovieStarInterface $movieStarService,
                                  protected MessageService $messageService,
-                                 protected ReviewService $reviewService
+                                 protected ReviewInterface $reviewService
     )
     {
     }
     public function index () {
         $user = Auth::user();
         $name = $user->name;
-        $movieNovos = Movie::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $movieAcao = Movie::where('user_id', $user->id)->get()
-        ->where('category', 'Ação');
-        $movieComedia = Movie::where('user_id', $user->id)->get()
-        ->where('category', 'Comédia');
+        $movieNovos = $user->movies()->orderBy('created_at', 'desc')->get();
+        $movieAcao = $user->movies()->where('category', 'Ação')->get();
+        $movieComedia = $user->movies()->where('category', 'Comédia')->get();
         return view('app.index', compact('name', 'movieNovos', 'movieAcao', 'movieComedia'));
     }
 
@@ -54,7 +50,7 @@ class MovieStarController extends Controller
     {
         $user = Auth::user();
         $name = $user->name;
-        $movies = Movie::where('user_id', $user->id)->get();
+        $movies = $user->movies()->where('user_id', $user->id)->get();
         foreach ($movies as $movie) {
             $movie->averageRating = $this->reviewService->averageRating($movie->id);
         }
@@ -63,7 +59,7 @@ class MovieStarController extends Controller
     public function getMovie ($id) {
         $user = Auth::user();
         $name = $user?->name;
-        $movie = Movie::where('user_id', $user->id)->find($id);
+        $movie = $user->movies()->where('user_id', $user->id)->find($id);
 
         if (!$movie) {
             $this->messageService->messageMovieNotFound();
@@ -83,16 +79,16 @@ class MovieStarController extends Controller
     public function viewPageEditiMovie ($id) {
         $user = Auth::user();
         $name = $user->name;
-        $movie = Movie::where('user_id', $user->id)->find($id);
+        $movie = $user->movies()->where('user_id', $user->id)->find($id);
         return view('app.editMovie', compact('movie', 'name'));
     }
     public function editMovie (Request $request, $id) {
         $user = Auth::user();
         $name = $user->name;
-        $movie = Movie::where('user_id', $user->id)->find($id);
+        $movie = $user->movies()->where('user_id', $user->id)->find($id);
         if ($request->isMethod('post')) {
             $this->movieStarService->editMovie($request->all());
-            $movie = Movie::where('user_id', $user->id)->find($id);
+            $movie = $user->movies()->where('user_id', $user->id)->find($id);
         }
         return view('app.editMovie', compact('movie', 'name'));
     }
@@ -137,3 +133,5 @@ class MovieStarController extends Controller
         return view('app.search', compact('movieNovos', 'q'));
     }
 }
+
+// Ter uma class interface midia abstrata e cada filha teria suas particularidades a nivel de banco ou entidade

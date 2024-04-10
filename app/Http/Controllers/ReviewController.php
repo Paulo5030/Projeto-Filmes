@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Movie;
 use App\Models\Review;
-use App\Services\ReviewService;
+use App\Services\Contracts\ReviewInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    public function __construct(protected ReviewService $reviewService)
+    public function __construct(protected ReviewInterface $reviewService)
     {
     }
     public function review (Request $request, $id)

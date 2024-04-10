@@ -6,17 +6,18 @@ use App\Models\Review;
 
 class ReviewRepository
 {
+    private $review;
     public function __construct(Review $review)
     {
+        $this->review = $review;
     }
     public function builReview ($data) {
-        $review = new Review();
-        $review->id = $data['id'];
-        $review->rating = $data['rating'];
-        $review->review = $data['review'];
-        $review->users_id = $data['users_id'];
-        $review->movies_id = $data['movies_id'];
+        $this->review->id = $data['id'];
+        $this->review->rating = $data['rating'];
+        $this->review->review = $data['review'];
+        $this->review->users_id = $data['users_id'];
+        $this->review->movies_id = $data['movies_id'];
 
-        return $review;
+        return $this->review;
     }
 }

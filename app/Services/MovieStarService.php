@@ -4,9 +4,10 @@ namespace App\Services;
 
 use App\Models\Movie;
 use App\Repositories\MovieRepository;
+use App\Services\Contracts\MovieStarInterface;
 use Illuminate\Support\Facades\Auth;
 
-class MovieStarService
+class MovieStarService implements MovieStarInterface
 {
     public function __construct(protected MovieRepository $movieRepository,
                                 protected MessageService $messageService,

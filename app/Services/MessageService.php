@@ -12,7 +12,7 @@ class MessageService
 
     }
 
-    public function getMessagefiels (){
+    public function getMessagefiels () {
         return $this->messageRepository->setMessage(new Message('Por favor, preencha todos os campos.'), 'error');
     }
     public function passwordsNotSame () {

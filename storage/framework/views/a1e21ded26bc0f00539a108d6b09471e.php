@@ -14,29 +14,29 @@
             <input type="hidden" name="type" value="update">
             <div class="row">
                 <div class="col-md-4">
-                    <h1><?php echo e($name); ?> <?php echo e($lastname); ?></h1>
+                    <h1><?php echo e($user['name']); ?> <?php echo e($user['lastname']); ?></h1>
                     <p class="page-description">Altere seus dados no formulário abaixo:</p>
 
                     <div class="form-group mb-3">
                         <label for="name" class="mb-2">Nome:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Digite seu nome" value="<?php echo e($name); ?>">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Digite seu nome" value="<?php echo e($user['name']); ?>">
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="lastname" class="mb-2">Sobrenome:</label>
-                        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Digite seu sobrenome" value="<?php echo e($lastname); ?>">
+                        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Digite seu sobrenome" value="<?php echo e($user['lastname']); ?>">
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="email" class="mb-2">E-mail:</label>
-                        <input type="text" readonly class="form-control text-muted" id="email" name="email" placeholder="Digite seu email" value="<?php echo e($email); ?>" disabled>
+                        <input type="text" readonly class="form-control text-muted" id="email" name="email" placeholder="Digite seu email" value="<?php echo e($user['email']); ?>" disabled>
                     </div>
 
                     <input type="submit" class="btn card-btn" value="Alterar">
                 </div>
 
                 <div class="col-md-4">
-                    <?php if($image && $image !== 'default_image.jpg'): ?>
+                    <?php if($user['image'] && $user['image'] !== 'default_image.jpg'): ?>
                         <div id="profile-image-container" style="background-image: url('<?php echo e(asset($image)); ?>')"></div>
                     <?php else: ?>
                         <div id="profile-image-container" style="background-image: url('<?php echo e(asset('img/users/user.png')); ?>')"></div>
@@ -47,7 +47,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="bio" class="mb-2">Sobre você:</label>
-                        <textarea class="form-control" name="bio" id="bio" rows="5" placeholder="Conte quem você é, o que faz e onde trabalha..."><?php echo e($bio); ?></textarea>
+                        <textarea class="form-control" name="bio" id="bio" rows="5" placeholder="Conte quem você é, o que faz e onde trabalha..."><?php echo e($user['bio']); ?></textarea>
                     </div>
                 </div>
             </div>

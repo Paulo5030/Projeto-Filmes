@@ -4,9 +4,10 @@ namespace App\Services;
 
 use App\Repositories\UserAuthRepository;
 use App\Models\User;
+use App\Services\Contracts\AuthInterface;
 use Illuminate\Support\Facades\Hash;
 
-class AuthService
+class AuthService implements AuthInterface
 {
     public function __construct(protected UserAuthRepository $userAuthRepository,
                                 protected MessageService $messageService
@@ -16,9 +17,7 @@ class AuthService
 
     public function create(array $data)
     {
-        $type = $data['type'] ?? null;
-
-        if ($type === "register") {
+        if ($data['type'] === "register") {
             $name = $data['name'] ?? null;
             $lastname = $data['lastname'] ?? null;
             $email = $data['email'] ?? null;
@@ -44,9 +43,7 @@ class AuthService
 
     public function updateUser(array $data)
     {
-        $type = $data['type'] ?? null;
-
-        if ($type === 'update') {
+        if ( $data['type'] === 'update') {
             $userId = auth()->id();
             $user = User::find($userId);
 
@@ -71,9 +68,7 @@ class AuthService
         }
     public function updatePassword(array $data)
     {
-        $type = $data['type'] ?? null;
-
-        if ($type === 'changepassword') {
+        if ($data['type'] === 'changepassword') {
             $password = $data['password'] ?? null;
             $confirmpassword = $data['confirmpassword'] ?? null;
 
